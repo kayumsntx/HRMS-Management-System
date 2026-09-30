@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="9.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HRMS.Domain\HRMS.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Models\" />
+    <Folder Include="Common\Exceptions\" />
+    <Folder Include="Common\Interfaces\" />
+    <Folder Include="DTOs\Companies\" />
+    <Folder Include="DTOs\Departments\" />
+    <Folder Include="DTOs\Designations\" />
+    <Folder Include="DTOs\Grades\" />
+    <Folder Include="DTOs\EmployeeStatuses\" />
+    <Folder Include="DTOs\Employees\" />
+    <Folder Include="DTOs\EmployeeEducations\" />
+    <Folder Include="DTOs\EmployeeNominees\" />
+    <Folder Include="DTOs\EmployeeDocuments\" />
+    <Folder Include="DTOs\Biometric\" />
+    <Folder Include="DTOs\Attendance\" />
+    <Folder Include="DTOs\Leave\" />
+    <Folder Include="DTOs\Payroll\" />
+    <Folder Include="DTOs\ShiftAssignments\" />
+    <Folder Include="DTOs\Shifts\" />
+    <Folder Include="DTOs\UserRoles\" />
+    <Folder Include="DTOs\Roles\" />
+    <Folder Include="DTOs\Users\" />
+    <Folder Include="DTOs\Sections\" />
+    <Folder Include="DTOs\Units\" />
+    <Folder Include="Interfaces\Repositories\" />
+    <Folder Include="Interfaces\Services\" />
+    <Folder Include="Mappings\" />
+    <Folder Include="Services\" />
+    <Folder Include="Validators\Companies\" />
+    <Folder Include="Validators\Departments\" />
+    <Folder Include="Validators\Employees\" />
+    <Folder Include="Validators\Leave\" />
+    <Folder Include="Validators\Payroll\" />
+    <Folder Include="Validators\Users\" />
+    <Folder Include="Validators\Units\" />
+  </ItemGroup>
+
+</Project>
