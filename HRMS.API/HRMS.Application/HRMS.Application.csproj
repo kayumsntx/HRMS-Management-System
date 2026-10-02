@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
     <PackageReference Include="FluentValidation" Version="9.1.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Companies\" />
     <Folder Include="DTOs\Departments\" />
     <Folder Include="DTOs\Designations\" />
     <Folder Include="DTOs\Grades\" />
@@ -36,9 +37,7 @@
     <Folder Include="DTOs\Sections\" />
     <Folder Include="DTOs\Units\" />
     <Folder Include="Interfaces\Services\" />
-    <Folder Include="Mappings\" />
     <Folder Include="Services\" />
-    <Folder Include="Validators\Companies\" />
     <Folder Include="Validators\Departments\" />
     <Folder Include="Validators\Employees\" />
     <Folder Include="Validators\Leave\" />
