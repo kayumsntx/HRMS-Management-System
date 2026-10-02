@@ -15,8 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Models\" />
-    <Folder Include="Common\Interfaces\" />
     <Folder Include="DTOs\Companies\" />
     <Folder Include="DTOs\Departments\" />
     <Folder Include="DTOs\Designations\" />
