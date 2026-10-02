@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Configurations\" />
     <Folder Include="Identity\" />
     <Folder Include="Logging\" />
   </ItemGroup>
