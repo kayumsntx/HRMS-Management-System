@@ -35,7 +35,6 @@
     <Folder Include="DTOs\Users\" />
     <Folder Include="DTOs\Sections\" />
     <Folder Include="DTOs\Units\" />
-    <Folder Include="Interfaces\Repositories\" />
     <Folder Include="Interfaces\Services\" />
     <Folder Include="Mappings\" />
     <Folder Include="Services\" />
