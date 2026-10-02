@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37628.2 d17.14
+VisualStudioVersion = 17.14.37628.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRMS.API", "HRMS.API\HRMS.API.csproj", "{17304804-C921-46BA-B018-952857E65D8B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{457B8461-D105-4CE6-8201-26810705E41E} = {457B8461-D105-4CE6-8201-26810705E41E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRMS.Domain", "HRMS.Domain\HRMS.Domain.csproj", "{C540DDB6-A7CE-4D82-AE92-446A34DB19FD}"
 EndProject
