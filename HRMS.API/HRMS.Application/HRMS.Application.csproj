@@ -36,14 +36,12 @@
     <Folder Include="DTOs\Roles\" />
     <Folder Include="DTOs\Users\" />
     <Folder Include="DTOs\Sections\" />
-    <Folder Include="DTOs\Units\" />
     <Folder Include="Services\" />
     <Folder Include="Validators\Departments\" />
     <Folder Include="Validators\Employees\" />
     <Folder Include="Validators\Leave\" />
     <Folder Include="Validators\Payroll\" />
     <Folder Include="Validators\Users\" />
-    <Folder Include="Validators\Units\" />
   </ItemGroup>
 
 </Project>
