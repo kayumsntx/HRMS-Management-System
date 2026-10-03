@@ -36,7 +36,6 @@
     <Folder Include="DTOs\Roles\" />
     <Folder Include="DTOs\Users\" />
     <Folder Include="DTOs\Sections\" />
-    <Folder Include="Services\" />
     <Folder Include="Validators\Departments\" />
     <Folder Include="Validators\Employees\" />
     <Folder Include="Validators\Leave\" />

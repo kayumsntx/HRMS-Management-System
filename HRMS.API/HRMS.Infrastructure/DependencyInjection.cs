@@ -1,4 +1,6 @@
 ﻿using HRMS.Application.Interfaces.Repositories;
+using HRMS.Application.Interfaces.Services;
+using HRMS.Application.Services;
 using HRMS.Infrastructure.Data;
 using HRMS.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +21,8 @@ namespace HRMS.Infrastructure
             services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("con")));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IUnitService, UnitService>();
             return services;
         }
     }

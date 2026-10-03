@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using HRMS.Application.Interfaces.Services;
+using HRMS.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

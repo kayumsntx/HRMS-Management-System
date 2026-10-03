@@ -2,6 +2,7 @@
 using HRMS.Application.Common.Exceptions;
 using HRMS.Application.DTOs.Companies;
 using HRMS.Application.Interfaces.Repositories;
+using HRMS.Application.Interfaces.Services;
 using HRMS.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRMS.Application.Interfaces.Services
+namespace HRMS.Application.Services
 {
     public class CompanyService : ICompanyService
     {
@@ -18,7 +19,7 @@ namespace HRMS.Application.Interfaces.Services
 
         public CompanyService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this._unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<List<CompanyResponseDto>> GetAllAsync()
