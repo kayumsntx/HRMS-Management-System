@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
-
-using HRMS.Application.DTOs.Companies;
-using HRMS.Domain.Entities;
 namespace HRMS.Application.Mappings
 {
     public class OrganizationMappingProfile : Profile 
