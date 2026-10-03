@@ -1,9 +1,10 @@
+using HRMS.API.Extensions;
 using HRMS.Application;
 using HRMS.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddApplication();
 
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
@@ -19,6 +20,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
