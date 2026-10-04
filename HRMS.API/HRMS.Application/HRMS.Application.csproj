@@ -34,7 +34,6 @@
     <Folder Include="DTOs\UserRoles\" />
     <Folder Include="DTOs\Roles\" />
     <Folder Include="DTOs\Users\" />
-    <Folder Include="DTOs\Sections\" />
     <Folder Include="Validators\Employees\" />
     <Folder Include="Validators\Leave\" />
     <Folder Include="Validators\Payroll\" />
