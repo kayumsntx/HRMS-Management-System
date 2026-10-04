@@ -27,7 +27,7 @@ namespace HRMS.Application
 
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<ISectionService, SectionService>();
-
+            services.AddScoped<IDesignationService, DesignationService>();
             return services;
         }
     }
