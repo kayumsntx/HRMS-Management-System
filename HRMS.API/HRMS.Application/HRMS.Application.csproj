@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Departments\" />
     <Folder Include="DTOs\Designations\" />
     <Folder Include="DTOs\Grades\" />
     <Folder Include="DTOs\EmployeeStatuses\" />
@@ -36,7 +35,6 @@
     <Folder Include="DTOs\Roles\" />
     <Folder Include="DTOs\Users\" />
     <Folder Include="DTOs\Sections\" />
-    <Folder Include="Validators\Departments\" />
     <Folder Include="Validators\Employees\" />
     <Folder Include="Validators\Leave\" />
     <Folder Include="Validators\Payroll\" />
