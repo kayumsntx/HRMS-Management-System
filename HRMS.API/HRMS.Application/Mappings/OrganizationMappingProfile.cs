@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HRMS.Application.DTOs.Companies;
 using HRMS.Application.DTOs.Departments;
+using HRMS.Application.DTOs.Designations;
 using HRMS.Application.DTOs.Sections;
 using HRMS.Application.DTOs.Units;
 using HRMS.Domain.Entities;
@@ -38,6 +39,12 @@ namespace HRMS.Application.Mappings
             CreateMap<Section, SectionResponseDto>();
             CreateMap<SectionCreateDto, Section>();
             CreateMap<SectionUpdateDto, Section>();
+
+
+            // Designation
+            CreateMap<Designation, DesignationResponseDto>();
+            CreateMap<DesignationCreateDto, Designation>();
+            CreateMap<DesignationUpdateDto, Designation>();
 
             // in future- Unit, Department, Section, Designation, Grade, EmployeeStatus
             //  DTO/Entity 
