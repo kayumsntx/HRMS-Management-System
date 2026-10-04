@@ -25,6 +25,8 @@ namespace HRMS.Application
             // Services
             services.AddScoped<ICompanyService, CompanyService>();
 
+            services.AddScoped<IDepartmentService, DepartmentService>();
+
             return services;
         }
     }
