@@ -8,7 +8,7 @@ namespace HRMS.Application.DTOs.Employees
 {
     public class EmployeeCreateDto
     {
-        public string EmployeeCode { get; set; } = default!;
+        //public string EmployeeCode { get; set; } = default!;
         public string FullName { get; set; } = default!;
         public string? NickName { get; set; }
         public string? Gender { get; set; }
