@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\EmployeeStatuses\" />
     <Folder Include="DTOs\Employees\" />
     <Folder Include="DTOs\EmployeeEducations\" />
     <Folder Include="DTOs\EmployeeNominees\" />
