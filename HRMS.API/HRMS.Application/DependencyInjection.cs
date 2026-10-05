@@ -24,10 +24,10 @@ namespace HRMS.Application
 
             // Services
             services.AddScoped<ICompanyService, CompanyService>();
-
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<IDesignationService, DesignationService>();
+            services.AddScoped<IGradeService, GradeService>();
             return services;
         }
     }
