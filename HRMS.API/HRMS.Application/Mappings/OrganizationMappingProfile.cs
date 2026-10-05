@@ -2,6 +2,7 @@
 using HRMS.Application.DTOs.Companies;
 using HRMS.Application.DTOs.Departments;
 using HRMS.Application.DTOs.Designations;
+using HRMS.Application.DTOs.Grades;
 using HRMS.Application.DTOs.Sections;
 using HRMS.Application.DTOs.Units;
 using HRMS.Domain.Entities;
@@ -45,6 +46,11 @@ namespace HRMS.Application.Mappings
             CreateMap<Designation, DesignationResponseDto>();
             CreateMap<DesignationCreateDto, Designation>();
             CreateMap<DesignationUpdateDto, Designation>();
+
+            // Grade
+            CreateMap<Grade, GradeResponseDto>();
+            CreateMap<GradeCreateDto, Grade>();
+            CreateMap<GradeUpdateDto, Grade>();
 
             // in future- Unit, Department, Section, Designation, Grade, EmployeeStatus
             //  DTO/Entity 
