@@ -33,6 +33,7 @@ namespace HRMS.Application
             services.AddScoped<IEmployeeEducationService, EmployeeEducationService>();
             services.AddScoped<IEmployeeNomineeService, EmployeeNomineeService>();
             services.AddScoped<IEmployeeDocumentService, EmployeeDocumentService>();
+            services.AddScoped<IRoleService, RoleService>();
             return services;
         }
     }

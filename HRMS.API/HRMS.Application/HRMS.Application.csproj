@@ -25,7 +25,6 @@
     <Folder Include="DTOs\ShiftAssignments\" />
     <Folder Include="DTOs\Shifts\" />
     <Folder Include="DTOs\UserRoles\" />
-    <Folder Include="DTOs\Roles\" />
     <Folder Include="DTOs\Users\" />
     <Folder Include="Validators\Leave\" />
     <Folder Include="Validators\Payroll\" />
