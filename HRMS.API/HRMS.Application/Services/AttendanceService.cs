@@ -23,6 +23,7 @@ public class AttendanceService : IAttendanceService
     private static readonly string StatusLate = AttendanceDayStatus.Late.ToString();
     private static readonly string StatusLeave = AttendanceDayStatus.Leave.ToString();
     private static readonly string StatusWeekend = AttendanceDayStatus.Weekend.ToString();
+    private static readonly string StatusHoliday = AttendanceDayStatus.Holiday.ToString();
     private static readonly string StatusHalfDay = AttendanceDayStatus.HalfDay.ToString();
 
     private readonly IUnitOfWork _unitOfWork;
@@ -72,6 +73,11 @@ public class AttendanceService : IAttendanceService
         var existingByKey = (await _unitOfWork.Repository<EmployeeAttendance>().FindAsync(a =>
                 a.WorkingDate >= fromDate && a.WorkingDate <= toDate))
             .ToDictionary(a => (a.EmployeeId, a.WorkingDate.Date));
+
+        var holidayDates = (await _unitOfWork.Repository<Holiday>().FindAsync(h =>
+                h.IsActive && h.HolidayDate >= fromDate && h.HolidayDate <= toDate))
+            .Select(h => h.HolidayDate.Date)
+            .ToHashSet();
 
         // ---- Punches (range widened to cover night shifts) ----
         var punchStart = fromDate.AddDays(-1);
@@ -157,7 +163,7 @@ public class AttendanceService : IAttendanceService
                 }
 
                 var onLeave = empLeaves?.Any(l => l.FromDate.Date <= date && l.ToDate.Date >= date) ?? false;
-                var metrics = Calculate(employee, shift, date, firstIn, lastOut, onLeave);
+                var metrics = Calculate(employee, shift, date, firstIn, lastOut, onLeave, holidayDates.Contains(date));
 
                 if (existing == null)
                 {
@@ -257,7 +263,8 @@ public class AttendanceService : IAttendanceService
         if (firstIn.HasValue && lastOut.HasValue && lastOut.Value <= firstIn.Value)
             throw new BadRequestException("Last Out Time must be after First In Time.");
 
-        var metrics = Calculate(employee, shift, date, firstIn, lastOut, false);
+        var isHoliday = await _unitOfWork.Repository<Holiday>().AnyAsync(h => h.IsActive && h.HolidayDate == date);
+        var metrics = Calculate(employee, shift, date, firstIn, lastOut, false, isHoliday);
         ApplyMetrics(attendance, metrics);
 
         if (!string.IsNullOrWhiteSpace(dto.DayStatus))
@@ -344,7 +351,7 @@ public class AttendanceService : IAttendanceService
     private static decimal ToHours(TimeSpan span) => Math.Round((decimal)span.TotalHours, 2);
 
     private static AttendanceMetrics Calculate(
-        Employee employee, Shift shift, DateTime date, DateTime? firstIn, DateTime? lastOut, bool onLeave)
+        Employee employee, Shift shift, DateTime date, DateTime? firstIn, DateTime? lastOut, bool onLeave, bool isHoliday)
     {
         var shiftStart = date + shift.StartTime;
         var shiftEnd = (CrossesMidnight(shift) ? date.AddDays(1) : date) + shift.EndTime;
@@ -354,7 +361,9 @@ public class AttendanceService : IAttendanceService
         // ---- No punch at all ----
         if (firstIn is null)
         {
-            if (onLeave)
+            if (isHoliday)
+                metrics.DayStatus = StatusHoliday;
+            else if (onLeave)
                 metrics.DayStatus = StatusLeave;
             else if (date.DayOfWeek == WeekendDay)
                 metrics.DayStatus = StatusWeekend;

@@ -14,17 +14,21 @@ public class LeaveService : ILeaveService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ICurrentUserService _currentUser;
+    private readonly INotificationPublisher _notifier;
 
     private static readonly string Pending = LeaveStatus.Pending.ToString();
     private static readonly string Approved = LeaveStatus.Approved.ToString();
     private static readonly string Rejected = LeaveStatus.Rejected.ToString();
     private static readonly string Cancelled = LeaveStatus.Cancelled.ToString();
 
-    public LeaveService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUser)
+    private static readonly string[] ApproverRoles = { "Admin", "HR" };
+
+    public LeaveService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUser, INotificationPublisher notifier)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _currentUser = currentUser;
+        _notifier = notifier;
     }
 
     public async Task<List<LeaveResponseDto>> GetAllAsync(string? status)
@@ -65,8 +69,8 @@ public class LeaveService : ILeaveService
 
     public async Task<LeaveResponseDto> ApplyAsync(LeaveApplyDto dto)
     {
-        if (await _unitOfWork.Repository<Employee>().GetByIdAsync(dto.EmployeeId) is null)
-            throw new NotFoundException(nameof(Employee), dto.EmployeeId);
+        var employee = await _unitOfWork.Repository<Employee>().GetByIdAsync(dto.EmployeeId)
+            ?? throw new NotFoundException(nameof(Employee), dto.EmployeeId);
 
         var leaveType = await _unitOfWork.Repository<LeaveType>().GetByIdAsync(dto.LeaveTypeId)
             ?? throw new NotFoundException(nameof(LeaveType), dto.LeaveTypeId);
@@ -110,6 +114,16 @@ public class LeaveService : ILeaveService
         leave.AppliedDate = DateTime.UtcNow;
 
         await _unitOfWork.Repository<EmployeeLeave>().AddAsync(leave);
+
+        // Tell Admin/HR users there is a new request (saved together with the leave).
+        await _notifier.NotifyRolesAsync(
+            ApproverRoles,
+            NotificationCategory.Leave,
+            "New leave request",
+            $"{employee.FullName} ({employee.EmployeeCode}) applied for {leaveType.LeaveTypeName} from {from:dd MMM yyyy} to {to:dd MMM yyyy} ({days} day(s)).",
+            "/leave",
+            _currentUser.UserId);
+
         await _unitOfWork.SaveChangesAsync();
 
         return (await MapListAsync(new[] { leave })).First();
@@ -145,7 +159,15 @@ public class LeaveService : ILeaveService
         leave.UpdatedDate = DateTime.UtcNow;
 
         _unitOfWork.Repository<EmployeeLeave>().Update(leave);
-        await _unitOfWork.SaveChangesAsync(); // balance + leave saved together in one transaction
+
+        await _notifier.NotifyEmployeeAsync(
+            leave.EmployeeId,
+            NotificationCategory.Leave,
+            "Leave approved",
+            $"Your {leaveType.LeaveTypeName} request from {leave.FromDate:dd MMM yyyy} to {leave.ToDate:dd MMM yyyy} has been approved.",
+            "/leave");
+
+        await _unitOfWork.SaveChangesAsync(); // balance + leave + notification saved together
 
         return (await MapListAsync(new[] { leave })).First();
     }
@@ -158,6 +180,8 @@ public class LeaveService : ILeaveService
         if (leave.Status != Pending)
             throw new BadRequestException($"Only Pending leave can be rejected. Current status: {leave.Status}.");
 
+        var leaveType = await _unitOfWork.Repository<LeaveType>().GetByIdAsync(leave.LeaveTypeId);
+
         leave.Status = Rejected;
         leave.RejectionReason = dto.RejectionReason;
         leave.ApprovedBy = _currentUser.UserId;
@@ -165,6 +189,14 @@ public class LeaveService : ILeaveService
         leave.UpdatedDate = DateTime.UtcNow;
 
         _unitOfWork.Repository<EmployeeLeave>().Update(leave);
+
+        await _notifier.NotifyEmployeeAsync(
+            leave.EmployeeId,
+            NotificationCategory.Leave,
+            "Leave rejected",
+            $"Your {leaveType?.LeaveTypeName ?? "leave"} request from {leave.FromDate:dd MMM yyyy} to {leave.ToDate:dd MMM yyyy} was rejected. Reason: {dto.RejectionReason}",
+            "/leave");
+
         await _unitOfWork.SaveChangesAsync();
 
         return (await MapListAsync(new[] { leave })).First();

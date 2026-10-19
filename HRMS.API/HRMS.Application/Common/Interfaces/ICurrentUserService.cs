@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace HRMS.Application.Common.Interfaces;
 
-namespace HRMS.Application.Common.Interfaces
+public interface ICurrentUserService
 {
-    public interface ICurrentUserService
-    {
-        int? UserId { get; }
-        string? UserName { get; }
-        bool IsAuthenticated { get; }
-    }
+    int? UserId { get; }
+    string? UserName { get; }
+    string? IpAddress { get; }
+    bool IsAuthenticated { get; }
 }

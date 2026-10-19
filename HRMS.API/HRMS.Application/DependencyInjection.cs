@@ -1,3 +1,4 @@
+using HRMS.Application.Common.Interfaces;
 using FluentValidation;
 using HRMS.Application.Interfaces.Services;
 using HRMS.Application.Services;
@@ -51,6 +52,12 @@ namespace HRMS.Application
             services.AddScoped<ISalaryService, SalaryService>();
             services.AddScoped<IPayrollService, PayrollService>();
 
+            // System & Notifications & Holidays & IdCards
+            services.AddScoped<IHolidayService, HolidayService>();
+            services.AddScoped<IAuditLogService, AuditLogService>();
+            services.AddScoped<INotificationPublisher, NotificationPublisher>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IIdCardService, IdCardService>();
             return services;
         }
     }
