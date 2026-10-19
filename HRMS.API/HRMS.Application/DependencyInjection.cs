@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using HRMS.Application.Interfaces.Services;
 using HRMS.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,13 +16,12 @@ namespace HRMS.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             //AutoMapper  MappingProfile  auto
-
             services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
             //FluentValidation  Validator  auto 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-            // Services
+            // Existing Services
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<ISectionService, SectionService>();
@@ -34,6 +33,24 @@ namespace HRMS.Application
             services.AddScoped<IEmployeeNomineeService, EmployeeNomineeService>();
             services.AddScoped<IEmployeeDocumentService, EmployeeDocumentService>();
             services.AddScoped<IRoleService, RoleService>();
+
+            // Added Services - Part I
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRoleService, UserRoleService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IShiftService, ShiftService>();
+            services.AddScoped<IShiftAssignmentService, ShiftAssignmentService>();
+            services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+            services.AddScoped<ILeaveBalanceService, LeaveBalanceService>();
+            services.AddScoped<ILeaveService, LeaveService>();
+            services.AddScoped<IBiometricDeviceService, BiometricDeviceService>();
+
+            // Added Services - Part F
+            services.AddScoped<IBiometricPunchService, BiometricPunchService>();
+            services.AddScoped<IAttendanceService, AttendanceService>();
+            services.AddScoped<ISalaryService, SalaryService>();
+            services.AddScoped<IPayrollService, PayrollService>();
+
             return services;
         }
     }

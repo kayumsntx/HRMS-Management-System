@@ -1,24 +1,26 @@
-﻿using AutoMapper;
+using AutoMapper;
 using HRMS.Application.DTOs.Roles;
+using HRMS.Application.DTOs.UserRoles;
+using HRMS.Application.DTOs.Users;
 using HRMS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HRMS.Application.Mappings
+namespace HRMS.Application.Mappings;
+
+public class SecurityMappingProfile : Profile
 {
-    public class SecurityMappingProfile : Profile
+    public SecurityMappingProfile()
     {
-        public SecurityMappingProfile()
-        {
-            // Role
-            CreateMap<Role, RoleResponseDto>();
-            CreateMap<RoleCreateDto, Role>();
-            CreateMap<RoleUpdateDto, Role>();
+        // Role
+        CreateMap<Role, RoleResponseDto>();
+        CreateMap<RoleCreateDto, Role>();
+        CreateMap<RoleUpdateDto, Role>();
 
-            
-        }
+        // User
+        CreateMap<User, UserResponseDto>();
+        CreateMap<UserCreateDto, User>();
+        CreateMap<UserUpdateDto, User>();
+
+        // UserRole
+        CreateMap<UserRole, UserRoleResponseDto>();
     }
 }

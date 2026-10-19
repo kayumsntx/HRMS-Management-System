@@ -1,7 +1,9 @@
-﻿using HRMS.Application.Interfaces.Repositories;
+using HRMS.Application.Common.Interfaces;
+using HRMS.Application.Interfaces.Repositories;
 using HRMS.Application.Interfaces.Services;
 using HRMS.Application.Services;
 using HRMS.Infrastructure.Data;
+using HRMS.Infrastructure.Identity;
 using HRMS.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,10 +21,12 @@ namespace HRMS.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("con")));
+                options.UseSqlServer(configuration.GetConnectionString("con")));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUnitService, UnitService>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             return services;
         }
     }
