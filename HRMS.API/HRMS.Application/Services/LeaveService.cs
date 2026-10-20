@@ -123,6 +123,15 @@ public class LeaveService : ILeaveService
             $"{employee.FullName} ({employee.EmployeeCode}) applied for {leaveType.LeaveTypeName} from {from:dd MMM yyyy} to {to:dd MMM yyyy} ({days} day(s)).",
             "/leave",
             _currentUser.UserId);
+if (employee.ReportingManagerId.HasValue)
+        {
+            await _notifier.NotifyEmployeeAsync(
+                employee.ReportingManagerId.Value,
+                NotificationCategory.Leave,
+                "Team leave request",
+                $"{employee.FullName} ({employee.EmployeeCode}) applied for {leaveType.LeaveTypeName} from {from:dd MMM yyyy} to {to:dd MMM yyyy} ({days} day(s)).",
+                "/team/leaves");
+        }
 
         await _unitOfWork.SaveChangesAsync();
 

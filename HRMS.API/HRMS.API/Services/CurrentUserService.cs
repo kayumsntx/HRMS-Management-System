@@ -21,6 +21,15 @@ public class CurrentUserService : ICurrentUserService
         }
     }
 
+    public int? EmployeeId
+    {
+        get
+        {
+            var value = _httpContextAccessor.HttpContext?.User.FindFirst("employeeId")?.Value;
+            return int.TryParse(value, out var id) ? (int?)id : null;
+        }
+    }
+
     public string? UserName => _httpContextAccessor.HttpContext?.User.Identity?.Name;
 
     public string? IpAddress => _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();

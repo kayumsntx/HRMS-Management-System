@@ -58,6 +58,11 @@ namespace HRMS.Application
             services.AddScoped<INotificationPublisher, NotificationPublisher>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IIdCardService, IdCardService>();
+            // MySpace, TeamLeave, Dashboard, Reports
+            services.AddScoped<IMyPayslipService, MyPayslipService>();
+            services.AddScoped<ITeamLeaveService, TeamLeaveService>();
+            services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IReportService, ReportService>();
             return services;
         }
     }

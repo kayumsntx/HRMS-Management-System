@@ -9,7 +9,7 @@ using HRMS.Application.Common.Interfaces;
 using HRMS.Infrastructure;
 using HRMS.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,14 +41,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    // Default for any endpoint that has no explicit authorization attribute.
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .RequireRole("Admin", "HR")
+        .Build();
+});
 
 builder.Services.AddControllers(options =>
 {
-    // Every endpoint requires a valid token unless [AllowAnonymous] is used (e.g. login).
-    // To disable temporarily, comment out the next line.
-    options.Filters.Add(new AuthorizeFilter());
-
     // Runs FluentValidation validators automatically.
     options.Filters.Add<ValidationFilter>();
 });
