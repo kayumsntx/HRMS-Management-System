@@ -90,6 +90,10 @@ public class DashboardService : IDashboardService
             .ToList();
 
         var pendingLeaves = await _unitOfWork.Repository<EmployeeLeave>().FindAsync(l => l.Status == pendingText);
+        var pendingRequisitions = await _unitOfWork.Repository<Requisition>().FindAsync(r => r.Status == pendingText);
+        var pendingCareerChanges = await _unitOfWork.Repository<EmployeeCareerHistory>().FindAsync(c => c.Status == pendingText);
+        var pendingSeparations = await _unitOfWork.Repository<EmployeeSeparation>().FindAsync(s => s.Status == pendingText);
+        var openVacancies = await _unitOfWork.Repository<JobVacancy>().FindAsync(v => v.Status == "Open");
 
         // ---------- New joiners ----------
         var joinFrom = day.AddDays(-NewJoinerDays);
@@ -124,6 +128,10 @@ public class DashboardService : IDashboardService
             LateToday = lateRecords.Count,
             OnLeaveToday = leavesToday.Count,
             PendingLeaveRequests = pendingLeaves.Count,
+            PendingRequisitions = pendingRequisitions.Count,
+            PendingCareerChanges = pendingCareerChanges.Count,
+            PendingSeparations = pendingSeparations.Count,
+            OpenVacancies = openVacancies.Count,
 
             LateEmployees = lateRecords
                 .OrderByDescending(r => r.LateHours)

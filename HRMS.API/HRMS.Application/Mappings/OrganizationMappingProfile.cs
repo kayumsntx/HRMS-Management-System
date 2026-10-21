@@ -64,8 +64,10 @@ namespace HRMS.Application.Mappings
             CreateMap<Employee, EmployeeListDto>();
 
             // DTO → Entity
-            CreateMap<EmployeeCreateDto, Employee>();
-            CreateMap<EmployeeUpdateDto, Employee>();
+            CreateMap<EmployeeCreateDto, Employee>()
+                .ForMember(dest => dest.ProfileImage, opt => opt.Ignore());
+            CreateMap<EmployeeUpdateDto, Employee>()
+                .ForMember(dest => dest.ProfileImage, opt => opt.Ignore());
 
       
 

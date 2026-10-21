@@ -39,6 +39,7 @@ public class ExceptionMiddleware
             BadRequestException => HttpStatusCode.BadRequest,      // 400
             Application.Common.Exceptions.ValidationException => HttpStatusCode.BadRequest, // 400
             UnauthorizedException => HttpStatusCode.Unauthorized,  // 401
+            Microsoft.AspNetCore.Http.BadHttpRequestException bad => (HttpStatusCode)bad.StatusCode,
             _ => HttpStatusCode.InternalServerError                // 500
         };
 

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using HRMS.Application.Common.Exceptions;
 using HRMS.Application.Common.Interfaces;
 using HRMS.Application.Common.Models;
@@ -25,6 +26,7 @@ public class AuthController : ControllerBase
     }
 
     [AllowAnonymous]
+    [EnableRateLimiting("login")]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
     {

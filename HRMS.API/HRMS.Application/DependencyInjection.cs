@@ -63,6 +63,22 @@ namespace HRMS.Application
             services.AddScoped<ITeamLeaveService, TeamLeaveService>();
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IReportService, ReportService>();
+            // HR Modules - Requisition, Career, Separation, Recruitment, Performance, Training
+            services.AddScoped<IRequisitionTypeService, RequisitionTypeService>();
+            services.AddScoped<ITrainingProgramService, TrainingProgramService>();
+            services.AddScoped<ITrainerService, TrainerService>();
+            services.AddScoped<IPerformancePeriodService, PerformancePeriodService>();
+            services.AddScoped<IKpiService, KpiService>();
+            services.AddScoped<IRequisitionService, RequisitionService>();
+            services.AddScoped<ICareerService, CareerService>();
+            services.AddScoped<ISeparationService, SeparationService>();
+            services.AddScoped<IRecruitmentService, RecruitmentService>();
+            services.AddScoped<IHiringService, HiringService>();
+            services.AddScoped<IPerformanceService, PerformanceService>();
+            services.AddScoped<ITrainingService, TrainingService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IIdCardDocumentService, IdCardDocumentService>();
+            services.AddScoped<ITeamService, TeamService>();
             return services;
         }
     }

@@ -66,6 +66,7 @@ secrets.json
 *.mdf
 *.ldf
 *.ndf
+Storage/
 
 ## ------- Test results -------
 [Tt]est[Rr]esult*/

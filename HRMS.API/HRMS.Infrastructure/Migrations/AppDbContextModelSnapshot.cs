@@ -22,6 +22,68 @@ namespace HRMS.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HRMS.Domain.Entities.Applicant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AppliedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CvPath")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<decimal?>("ExpectedSalary")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobVacancyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MobileNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobVacancyId");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("Applicants", (string)null);
+                });
+
             modelBuilder.Entity("HRMS.Domain.Entities.AuditLog", b =>
                 {
                     b.Property<int>("Id")
@@ -523,6 +585,98 @@ namespace HRMS.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("HRMS.Domain.Entities.EmployeeCareerHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("AppliedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ApprovedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ChangeType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApplied")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("NewDepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NewDesignationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NewGradeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NewSectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NewUnitId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OldDepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OldDesignationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OldGradeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OldSectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OldUnitId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("Status", "IsApplied");
+
+                    b.ToTable("EmployeeCareerHistories", (string)null);
+                });
+
             modelBuilder.Entity("HRMS.Domain.Entities.EmployeeDocument", b =>
                 {
                     b.Property<int>("Id")
@@ -635,6 +789,60 @@ namespace HRMS.Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeeEducations", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.EmployeeGoal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal?>("AchievedValue")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GoalTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PerformancePeriodId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal?>("TargetValue")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PerformancePeriodId");
+
+                    b.HasIndex("EmployeeId", "PerformancePeriodId");
+
+                    b.ToTable("EmployeeGoals", (string)null);
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.EmployeeLeave", b =>
@@ -868,6 +1076,69 @@ namespace HRMS.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("HRMS.Domain.Entities.EmployeeSeparation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApprovedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CompletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastWorkingDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("SeparationType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_EmployeeSeparations_Open")
+                        .HasFilter("[Status] IN ('Pending','Approved')");
+
+                    b.ToTable("EmployeeSeparations", (string)null);
+                });
+
             modelBuilder.Entity("HRMS.Domain.Entities.EmployeeStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -900,6 +1171,112 @@ namespace HRMS.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("EmployeeStatuses", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.ExitInterview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Feedback")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("InterviewDate")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("InterviewerEmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SeparationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("WouldRejoin")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InterviewerEmployeeId");
+
+                    b.HasIndex("SeparationId")
+                        .IsUnique();
+
+                    b.ToTable("ExitInterviews", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.FinalSettlement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApprovedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("LeaveEncashment")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("NetPayable")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("OtherDeduction")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("OtherPayable")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("PayableSalary")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<int>("SeparationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SettlementDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("TotalDeduction")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeparationId")
+                        .IsUnique();
+
+                    b.ToTable("FinalSettlements", (string)null);
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.Grade", b =>
@@ -1046,6 +1423,297 @@ namespace HRMS.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("HRMS.Domain.Entities.Interview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplicantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InterviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InterviewRound")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Venue")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicantId", "InterviewRound")
+                        .IsUnique();
+
+                    b.ToTable("Interviews", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.InterviewEvaluation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EvaluatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EvaluatorEmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InterviewId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<decimal>("Score")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EvaluatorEmployeeId");
+
+                    b.HasIndex("InterviewId");
+
+                    b.ToTable("InterviewEvaluations", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.JobOffer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplicantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DesignationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("JoiningDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("OfferDate")
+                        .HasColumnType("date");
+
+                    b.Property<decimal>("OfferedSalary")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicantId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("JobOffers", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.JobVacancy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Deadline")
+                        .HasColumnType("date");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DesignationId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JobDescription")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<int?>("ManpowerRequisitionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfVacancy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PostedDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.HasIndex("ManpowerRequisitionId");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("JobVacancies", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.Kpi", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("DesignationId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("KpiName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Weight")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.ToTable("Kpis", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.KpiEvaluation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KpiId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PerformanceEvaluationId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Score")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KpiId");
+
+                    b.HasIndex("PerformanceEvaluationId", "KpiId")
+                        .IsUnique();
+
+                    b.ToTable("KpiEvaluations", (string)null);
+                });
+
             modelBuilder.Entity("HRMS.Domain.Entities.LeaveType", b =>
                 {
                     b.Property<int>("Id")
@@ -1081,6 +1749,74 @@ namespace HRMS.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("LeaveTypes", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.ManpowerRequisition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApprovedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DesignationId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Justification")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("RequestedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequiredCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("RequiredDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("RequisitionNo")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.HasIndex("RequisitionNo")
+                        .IsUnique();
+
+                    b.ToTable("ManpowerRequisitions", (string)null);
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.Notification", b =>
@@ -1248,6 +1984,242 @@ namespace HRMS.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("HRMS.Domain.Entities.PerformanceEvaluation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EvaluatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EvaluatorEmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PerformancePeriodId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Rating")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal?>("TotalScore")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EvaluatorEmployeeId");
+
+                    b.HasIndex("PerformancePeriodId");
+
+                    b.HasIndex("EmployeeId", "PerformancePeriodId")
+                        .IsUnique();
+
+                    b.ToTable("PerformanceEvaluations", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.PerformancePeriod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PeriodName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PeriodName")
+                        .IsUnique();
+
+                    b.ToTable("PerformancePeriods", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.Requisition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApprovedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Purpose")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("RequisitionDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("RequisitionNo")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("RequisitionTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("RequisitionNo")
+                        .IsUnique();
+
+                    b.HasIndex("RequisitionTypeId");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("Requisitions", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.RequisitionDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("RequisitionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Unit")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequisitionId");
+
+                    b.ToTable("RequisitionDetails", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.RequisitionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TypeName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeName")
+                        .IsUnique();
+
+                    b.ToTable("RequisitionTypes", (string)null);
+                });
+
             modelBuilder.Entity("HRMS.Domain.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -1313,6 +2285,56 @@ namespace HRMS.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Sections", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.SeparationClearance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ClearedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ClearedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("DueAmount")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCleared")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("SeparationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("SeparationId", "DepartmentId")
+                        .IsUnique();
+
+                    b.ToTable("SeparationClearances", (string)null);
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.Shift", b =>
@@ -1399,6 +2421,251 @@ namespace HRMS.Infrastructure.Migrations
                         {
                             t.HasCheckConstraint("CK_ShiftAssignment_Date", "[EffectiveTo] IS NULL OR [EffectiveTo] >= [EffectiveFrom]");
                         });
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.Trainer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Mobile")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Organization")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("TrainerName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Trainers", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.TrainingAttendance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AttendanceDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPresent")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TrainingParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainingParticipantId", "AttendanceDate")
+                        .IsUnique();
+
+                    b.ToTable("TrainingAttendances", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.TrainingEvaluation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EvaluatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Feedback")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("Score")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("TrainingParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainingParticipantId")
+                        .IsUnique();
+
+                    b.ToTable("TrainingEvaluations", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.TrainingParticipant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("TrainingScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("TrainingScheduleId", "EmployeeId")
+                        .IsUnique();
+
+                    b.ToTable("TrainingParticipants", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.TrainingProgram", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("DurationHours")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProgramName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgramName")
+                        .IsUnique();
+
+                    b.ToTable("TrainingPrograms", (string)null);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.TrainingSchedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal?>("Cost")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int?>("TrainerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrainingProgramId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Venue")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("TrainerId");
+
+                    b.HasIndex("TrainingProgramId");
+
+                    b.ToTable("TrainingSchedules", (string)null);
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.Unit", b =>
@@ -1528,6 +2795,15 @@ namespace HRMS.Infrastructure.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("HRMS.Domain.Entities.Applicant", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.JobVacancy", null)
+                        .WithMany()
+                        .HasForeignKey("JobVacancyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("HRMS.Domain.Entities.BiometricPunch", b =>
                 {
                     b.HasOne("HRMS.Domain.Entities.BiometricDevice", "BiometricDevice")
@@ -1628,6 +2904,15 @@ namespace HRMS.Infrastructure.Migrations
                     b.Navigation("Shift");
                 });
 
+            modelBuilder.Entity("HRMS.Domain.Entities.EmployeeCareerHistory", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("HRMS.Domain.Entities.EmployeeDocument", b =>
                 {
                     b.HasOne("HRMS.Domain.Entities.Employee", "Employee")
@@ -1648,6 +2933,21 @@ namespace HRMS.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.EmployeeGoal", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.PerformancePeriod", null)
+                        .WithMany()
+                        .HasForeignKey("PerformancePeriodId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.EmployeeLeave", b =>
@@ -1710,6 +3010,38 @@ namespace HRMS.Infrastructure.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("HRMS.Domain.Entities.EmployeeSeparation", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.ExitInterview", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("InterviewerEmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HRMS.Domain.Entities.EmployeeSeparation", null)
+                        .WithMany()
+                        .HasForeignKey("SeparationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.FinalSettlement", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.EmployeeSeparation", null)
+                        .WithMany()
+                        .HasForeignKey("SeparationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("HRMS.Domain.Entities.IdCard", b =>
                 {
                     b.HasOne("HRMS.Domain.Entities.Employee", "Employee")
@@ -1719,6 +3051,112 @@ namespace HRMS.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.Interview", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Applicant", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.InterviewEvaluation", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EvaluatorEmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HRMS.Domain.Entities.Interview", null)
+                        .WithMany()
+                        .HasForeignKey("InterviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.JobOffer", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Applicant", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.Designation", null)
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.JobVacancy", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.Designation", null)
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.ManpowerRequisition", null)
+                        .WithMany()
+                        .HasForeignKey("ManpowerRequisitionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.Kpi", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HRMS.Domain.Entities.Designation", null)
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.KpiEvaluation", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Kpi", null)
+                        .WithMany()
+                        .HasForeignKey("KpiId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.PerformanceEvaluation", null)
+                        .WithMany("KpiEvaluations")
+                        .HasForeignKey("PerformanceEvaluationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.ManpowerRequisition", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.Designation", null)
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.Notification", b =>
@@ -1749,6 +3187,50 @@ namespace HRMS.Infrastructure.Migrations
                     b.Navigation("Payroll");
                 });
 
+            modelBuilder.Entity("HRMS.Domain.Entities.PerformanceEvaluation", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EvaluatorEmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HRMS.Domain.Entities.PerformancePeriod", null)
+                        .WithMany()
+                        .HasForeignKey("PerformancePeriodId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.Requisition", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.RequisitionType", null)
+                        .WithMany()
+                        .HasForeignKey("RequisitionTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.RequisitionDetail", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Requisition", null)
+                        .WithMany("Details")
+                        .HasForeignKey("RequisitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("HRMS.Domain.Entities.Section", b =>
                 {
                     b.HasOne("HRMS.Domain.Entities.Department", "Department")
@@ -1758,6 +3240,21 @@ namespace HRMS.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.SeparationClearance", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.EmployeeSeparation", null)
+                        .WithMany()
+                        .HasForeignKey("SeparationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.ShiftAssignment", b =>
@@ -1777,6 +3274,61 @@ namespace HRMS.Infrastructure.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Shift");
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.Trainer", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.TrainingAttendance", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.TrainingParticipant", null)
+                        .WithMany()
+                        .HasForeignKey("TrainingParticipantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.TrainingEvaluation", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.TrainingParticipant", null)
+                        .WithMany()
+                        .HasForeignKey("TrainingParticipantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.TrainingParticipant", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Domain.Entities.TrainingSchedule", null)
+                        .WithMany()
+                        .HasForeignKey("TrainingScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.TrainingSchedule", b =>
+                {
+                    b.HasOne("HRMS.Domain.Entities.Trainer", null)
+                        .WithMany()
+                        .HasForeignKey("TrainerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HRMS.Domain.Entities.TrainingProgram", null)
+                        .WithMany()
+                        .HasForeignKey("TrainingProgramId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.Unit", b =>
@@ -1872,6 +3424,16 @@ namespace HRMS.Infrastructure.Migrations
             modelBuilder.Entity("HRMS.Domain.Entities.Payroll", b =>
                 {
                     b.Navigation("PayrollDetails");
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.PerformanceEvaluation", b =>
+                {
+                    b.Navigation("KpiEvaluations");
+                });
+
+            modelBuilder.Entity("HRMS.Domain.Entities.Requisition", b =>
+                {
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("HRMS.Domain.Entities.Role", b =>

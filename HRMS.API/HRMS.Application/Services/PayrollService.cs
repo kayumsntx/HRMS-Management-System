@@ -27,10 +27,13 @@ public class PayrollService : IPayrollService
     private readonly IMapper _mapper;
     private readonly ICurrentUserService _currentUser;
     private readonly IAttendanceService _attendanceService;
+    private readonly INotificationPublisher _notifier;
 
     public PayrollService(
-        IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUser, IAttendanceService attendanceService)
+        IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUser, IAttendanceService attendanceService,
+        INotificationPublisher notifier)
     {
+        _notifier = notifier;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _currentUser = currentUser;
@@ -289,6 +292,10 @@ public class PayrollService : IPayrollService
         payroll.UpdatedDate = DateTime.UtcNow;
 
         _unitOfWork.Repository<Payroll>().Update(payroll);
+
+        await NotifyPayrollAsync(payroll, "Payslip available",
+            $"Your payslip for {new DateTime(payroll.PayrollYear, payroll.PayrollMonth, 1):MMMM yyyy} is now available.");
+
         await _unitOfWork.SaveChangesAsync();
 
         return await GetByIdAsync(id);
@@ -306,6 +313,10 @@ public class PayrollService : IPayrollService
         payroll.UpdatedDate = DateTime.UtcNow;
 
         _unitOfWork.Repository<Payroll>().Update(payroll);
+
+        await NotifyPayrollAsync(payroll, "Salary paid",
+            $"Your salary for {new DateTime(payroll.PayrollYear, payroll.PayrollMonth, 1):MMMM yyyy} has been paid.");
+
         await _unitOfWork.SaveChangesAsync();
 
         return await GetByIdAsync(id);
@@ -386,6 +397,23 @@ public class PayrollService : IPayrollService
     // =====================================================================
     // PRIVATE HELPERS
     // =====================================================================
+    private async Task NotifyPayrollAsync(Payroll payroll, string title, string message)
+    {
+        var employeeIds = (await _unitOfWork.Repository<PayrollDetail>().FindAsync(d => d.PayrollId == payroll.Id))
+            .Select(d => d.EmployeeId)
+            .ToList();
+
+        if (employeeIds.Count == 0)
+            return;
+
+        var userIds = (await _unitOfWork.Repository<User>()
+                .FindAsync(u => u.IsActive && u.EmployeeId != null && employeeIds.Contains(u.EmployeeId.Value)))
+            .Select(u => u.Id)
+            .ToList();
+
+        await _notifier.NotifyUsersAsync(userIds, NotificationCategory.Payroll, title, message, "/my/payslips");
+    }
+
     private static decimal Round(decimal value) => Math.Round(value, 2, MidpointRounding.AwayFromZero);
 
     private PayrollResponseDto BuildResponse(Payroll payroll, List<PayrollDetail> details)

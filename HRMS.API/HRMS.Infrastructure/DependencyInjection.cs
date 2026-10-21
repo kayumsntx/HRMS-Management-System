@@ -1,3 +1,5 @@
+using HRMS.Infrastructure.Documents;
+using HRMS.Infrastructure.Storage;
 using HRMS.Application.Common.Interfaces;
 using HRMS.Application.Interfaces.Repositories;
 using HRMS.Application.Interfaces.Services;
@@ -27,6 +29,8 @@ namespace HRMS.Infrastructure
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton<IFileStorage, LocalFileStorage>();
+        services.AddSingleton<IIdCardPdfGenerator, IdCardPdfGenerator>();
             return services;
         }
     }

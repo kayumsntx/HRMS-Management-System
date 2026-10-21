@@ -38,6 +38,10 @@ public class DashboardSummaryDto
     public int LateToday { get; set; }
     public int OnLeaveToday { get; set; }
     public int PendingLeaveRequests { get; set; }
+    public int PendingRequisitions { get; set; }
+    public int PendingCareerChanges { get; set; }
+    public int PendingSeparations { get; set; }
+    public int OpenVacancies { get; set; }
 
     public List<DashboardPersonDto> LateEmployees { get; set; } = new();
     public List<DashboardPersonDto> AbsentEmployees { get; set; } = new();

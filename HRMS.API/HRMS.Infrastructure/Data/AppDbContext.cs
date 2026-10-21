@@ -62,6 +62,33 @@ public class AppDbContext : DbContext
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<IdCard> IdCards => Set<IdCard>();
 
+    // Requisition, Career, Separation, Recruitment, Performance, Training
+    public DbSet<RequisitionType> RequisitionTypes => Set<RequisitionType>();
+    public DbSet<Requisition> Requisitions => Set<Requisition>();
+    public DbSet<RequisitionDetail> RequisitionDetails => Set<RequisitionDetail>();
+    public DbSet<EmployeeCareerHistory> EmployeeCareerHistories => Set<EmployeeCareerHistory>();
+    public DbSet<EmployeeSeparation> EmployeeSeparations => Set<EmployeeSeparation>();
+    public DbSet<ExitInterview> ExitInterviews => Set<ExitInterview>();
+    public DbSet<SeparationClearance> SeparationClearances => Set<SeparationClearance>();
+    public DbSet<FinalSettlement> FinalSettlements => Set<FinalSettlement>();
+    public DbSet<ManpowerRequisition> ManpowerRequisitions => Set<ManpowerRequisition>();
+    public DbSet<JobVacancy> JobVacancies => Set<JobVacancy>();
+    public DbSet<Applicant> Applicants => Set<Applicant>();
+    public DbSet<Interview> Interviews => Set<Interview>();
+    public DbSet<InterviewEvaluation> InterviewEvaluations => Set<InterviewEvaluation>();
+    public DbSet<JobOffer> JobOffers => Set<JobOffer>();
+    public DbSet<PerformancePeriod> PerformancePeriods => Set<PerformancePeriod>();
+    public DbSet<Kpi> Kpis => Set<Kpi>();
+    public DbSet<EmployeeGoal> EmployeeGoals => Set<EmployeeGoal>();
+    public DbSet<PerformanceEvaluation> PerformanceEvaluations => Set<PerformanceEvaluation>();
+    public DbSet<KpiEvaluation> KpiEvaluations => Set<KpiEvaluation>();
+    public DbSet<TrainingProgram> TrainingPrograms => Set<TrainingProgram>();
+    public DbSet<Trainer> Trainers => Set<Trainer>();
+    public DbSet<TrainingSchedule> TrainingSchedules => Set<TrainingSchedule>();
+    public DbSet<TrainingParticipant> TrainingParticipants => Set<TrainingParticipant>();
+    public DbSet<TrainingAttendance> TrainingAttendances => Set<TrainingAttendance>();
+    public DbSet<TrainingEvaluation> TrainingEvaluations => Set<TrainingEvaluation>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
