@@ -79,6 +79,21 @@ namespace HRMS.Application
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IIdCardDocumentService, IdCardDocumentService>();
             services.AddScoped<ITeamService, TeamService>();
+            // Organization masters, Employee extras, Leave policies, Bonuses, Loans
+            services.AddScoped<ISubSectionService, SubSectionService>();
+            services.AddScoped<IJobLocationService, JobLocationService>();
+            services.AddScoped<IStaffCategoryService, StaffCategoryService>();
+            services.AddScoped<ISkillCategoryService, SkillCategoryService>();
+            services.AddScoped<IPaymentTypeService, PaymentTypeService>();
+            services.AddScoped<IBankService, BankService>();
+            services.AddScoped<IEmployeeSkillService, EmployeeSkillService>();
+            services.AddScoped<IEmployeePreviousJobService, EmployeePreviousJobService>();
+            services.AddScoped<IEmployeeAddressService, EmployeeAddressService>();
+            services.AddScoped<IEmployeeBankAccountService, EmployeeBankAccountService>();
+            services.AddScoped<ILeavePolicyService, LeavePolicyService>();
+            services.AddScoped<ILeaveBalanceGenerationService, LeaveBalanceGenerationService>();
+            services.AddScoped<IBonusService, BonusService>();
+            services.AddScoped<ILoanService, LoanService>();
             return services;
         }
     }

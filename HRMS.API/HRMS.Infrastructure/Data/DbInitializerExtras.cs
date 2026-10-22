@@ -7,7 +7,7 @@ public static class DbInitializerExtras
 {
     public static async Task SeedAsync(AppDbContext context)
     {
-        var types = new[]
+        var requisitionTypes = new[]
         {
             ("Employee", "General employee requisition"),
             ("Tiffin", "Tiffin / meal requisition"),
@@ -15,10 +15,16 @@ public static class DbInitializerExtras
             ("Office", "Office supply requisition")
         };
 
-        foreach (var (name, description) in types)
+        foreach (var (name, description) in requisitionTypes)
         {
             if (!await context.RequisitionTypes.AnyAsync(t => t.TypeName == name))
                 context.RequisitionTypes.Add(new RequisitionType { TypeName = name, Description = description });
+        }
+
+        foreach (var name in new[] { "Cash", "Bank Transfer", "Mobile Banking" })
+        {
+            if (!await context.PaymentTypes.AnyAsync(t => t.PaymentTypeName == name))
+                context.PaymentTypes.Add(new PaymentType { PaymentTypeName = name });
         }
 
         await context.SaveChangesAsync();

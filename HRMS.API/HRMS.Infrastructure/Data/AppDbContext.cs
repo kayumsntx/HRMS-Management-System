@@ -89,6 +89,21 @@ public class AppDbContext : DbContext
     public DbSet<TrainingAttendance> TrainingAttendances => Set<TrainingAttendance>();
     public DbSet<TrainingEvaluation> TrainingEvaluations => Set<TrainingEvaluation>();
 
+    // Org Extras, Employee Extras, Payroll Extras
+    public DbSet<SubSection> SubSections => Set<SubSection>();
+    public DbSet<JobLocation> JobLocations => Set<JobLocation>();
+    public DbSet<StaffCategory> StaffCategories => Set<StaffCategory>();
+    public DbSet<SkillCategory> SkillCategories => Set<SkillCategory>();
+    public DbSet<PaymentType> PaymentTypes => Set<PaymentType>();
+    public DbSet<Bank> Banks => Set<Bank>();
+    public DbSet<EmployeeSkill> EmployeeSkills => Set<EmployeeSkill>();
+    public DbSet<EmployeePreviousJob> EmployeePreviousJobs => Set<EmployeePreviousJob>();
+    public DbSet<EmployeeAddress> EmployeeAddresses => Set<EmployeeAddress>();
+    public DbSet<EmployeeBankAccount> EmployeeBankAccounts => Set<EmployeeBankAccount>();
+    public DbSet<LeavePolicy> LeavePolicies => Set<LeavePolicy>();
+    public DbSet<Bonus> Bonuses => Set<Bonus>();
+    public DbSet<Loan> Loans => Set<Loan>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

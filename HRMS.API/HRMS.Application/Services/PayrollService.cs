@@ -120,6 +120,16 @@ public class PayrollService : IPayrollService
             .GroupBy(l => l.EmployeeId)
             .ToDictionary(g => g.Key, g => g.ToList());
 
+        var bonusByEmployee = (await _unitOfWork.Repository<Bonus>()
+                .FindAsync(b => b.IsActive && b.BonusMonth == dto.PayrollMonth && b.BonusYear == dto.PayrollYear))
+            .GroupBy(b => b.EmployeeId)
+            .ToDictionary(g => g.Key, g => g.Sum(b => b.Amount));
+
+        var loansByEmployee = (await _unitOfWork.Repository<Loan>()
+                .FindAsync(l => l.Status == LoanStatus.Active.ToString() && l.StartDate <= monthEnd))
+            .GroupBy(l => l.EmployeeId)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
         // ---- Header ----
         if (payroll == null)
         {
@@ -196,6 +206,12 @@ public class PayrollService : IPayrollService
             var deduction = Round(perDaySalary * (deductionDates.Count + halfDays * 0.5m));
             deduction = Math.Min(deduction, basicPaid + allowancePaid);
 
+            if (loansByEmployee.TryGetValue(employee.Id, out var employeeLoans))
+            {
+                foreach (var loan in employeeLoans.Where(l => l.PaidInstallments < l.TotalInstallments))
+                    deduction += LoanService.InstallmentFor(loan, loan.PaidInstallments + 1);
+            }
+
             // Overtime (only for overtime-eligible employees).
             var overtimeHours = employee.IsOvertimeEligible ? empAttendance.Sum(a => a.OTHours ?? 0m) : 0m;
             var overtimeRate = salary.OvertimeRatePerHour ?? Round(salary.BasicSalary / MonthlyOvertimeDivisor * OvertimeMultiplier);
@@ -205,7 +221,7 @@ public class PayrollService : IPayrollService
             var isNew = detail == null;
             detail ??= new PayrollDetail { Payroll = payroll, EmployeeId = employee.Id };
 
-            var bonus = isNew ? 0m : detail.BonusAmount;   // manual bonus survives recalculation
+            var bonus = bonusByEmployee.GetValueOrDefault(employee.Id);
             var gross = basicPaid + allowancePaid + overtimeAmount + bonus;
 
             detail.BasicSalary = basicPaid;
@@ -317,6 +333,8 @@ public class PayrollService : IPayrollService
         await NotifyPayrollAsync(payroll, "Salary paid",
             $"Your salary for {new DateTime(payroll.PayrollYear, payroll.PayrollMonth, 1):MMMM yyyy} has been paid.");
 
+        await AdvanceLoansAsync(payroll);
+
         await _unitOfWork.SaveChangesAsync();
 
         return await GetByIdAsync(id);
@@ -397,6 +415,35 @@ public class PayrollService : IPayrollService
     // =====================================================================
     // PRIVATE HELPERS
     // =====================================================================
+    // When a payroll is paid, every active loan of an employee in that payroll moves to its next installment.
+    private async Task AdvanceLoansAsync(Payroll payroll)
+    {
+        var monthEnd = new DateTime(payroll.PayrollYear, payroll.PayrollMonth, 1).AddMonths(1).AddDays(-1);
+        var activeText = LoanStatus.Active.ToString();
+
+        var employeeIds = (await _unitOfWork.Repository<PayrollDetail>().FindAsync(d => d.PayrollId == payroll.Id))
+            .Select(d => d.EmployeeId)
+            .ToList();
+
+        if (employeeIds.Count == 0)
+            return;
+
+        // Loans approved after this payroll was processed were not deducted, so they are not advanced.
+        var loans = await _unitOfWork.Repository<Loan>().FindAsync(l =>
+            l.Status == activeText && l.StartDate <= monthEnd && l.ApprovedDate != null && l.ApprovedDate <= payroll.ProcessDate &&
+            employeeIds.Contains(l.EmployeeId));
+
+        foreach (var loan in loans.Where(l => l.PaidInstallments < l.TotalInstallments))
+        {
+            loan.PaidInstallments += 1;
+            if (loan.PaidInstallments >= loan.TotalInstallments)
+                loan.Status = LoanStatus.Closed.ToString();
+
+            loan.UpdatedDate = DateTime.UtcNow;
+            _unitOfWork.Repository<Loan>().Update(loan);
+        }
+    }
+
     private async Task NotifyPayrollAsync(Payroll payroll, string title, string message)
     {
         var employeeIds = (await _unitOfWork.Repository<PayrollDetail>().FindAsync(d => d.PayrollId == payroll.Id))

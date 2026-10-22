@@ -62,10 +62,14 @@ public abstract class CrudService<TEntity, TCreate, TUpdate, TResponse> : ICrudS
         return (await MapAsync(new[] { entity })).First();
     }
 
+    protected virtual Task OnDeletingAsync(TEntity entity) => Task.CompletedTask;
+
     public async Task DeleteAsync(int id)
     {
         var entity = await UnitOfWork.Repository<TEntity>().GetByIdAsync(id)
             ?? throw new NotFoundException(typeof(TEntity).Name, id);
+
+        await OnDeletingAsync(entity);
 
         entity.IsActive = false;
         entity.UpdatedDate = DateTime.UtcNow;
