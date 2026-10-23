@@ -148,6 +148,17 @@ public class BiometricPunchService : IBiometricPunchService
             foreach (var deviceId in toInsert.Select(p => p.BiometricDeviceId).Distinct())
             {
                 var device = activeDevices[deviceId];
+                await _unitOfWork.Repository<BiometricSyncHistory>().AddAsync(new BiometricSyncHistory
+                {
+                    BiometricDeviceId = deviceId,
+                    SyncType = "PunchImport",
+                    StartTime = DateTime.UtcNow,
+                    EndTime = DateTime.UtcNow,
+                    TotalRecords = validPunches.Count(p => p.BiometricDeviceId == deviceId),
+                    NewRecords = toInsert.Count(p => p.BiometricDeviceId == deviceId),
+                    Status = "Success"
+                });
+
                 device.LastSyncDate = DateTime.UtcNow;
                 _unitOfWork.Repository<BiometricDevice>().Update(device);
             }

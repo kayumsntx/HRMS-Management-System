@@ -130,6 +130,20 @@ public class PayrollService : IPayrollService
             .GroupBy(l => l.EmployeeId)
             .ToDictionary(g => g.Key, g => g.ToList());
 
+                var deductionComponentIds = (await _unitOfWork.Repository<SalaryComponent>()
+                .FindAsync(c => c.ComponentType == "Deduction"))
+            .Select(c => c.Id)
+            .ToList();
+
+        var salaryIdsForMonth = salaryByEmployee.Values.Select(s => s.Id).ToList();
+
+        var fixedDeductionBySalary = deductionComponentIds.Count == 0 || salaryIdsForMonth.Count == 0
+            ? new Dictionary<int, decimal>()
+            : (await _unitOfWork.Repository<EmployeeSalaryComponent>().FindAsync(c =>
+                    salaryIdsForMonth.Contains(c.EmployeeSalaryId) && deductionComponentIds.Contains(c.SalaryComponentId)))
+                .GroupBy(c => c.EmployeeSalaryId)
+                .ToDictionary(g => g.Key, g => g.Sum(c => c.Amount));
+
         // ---- Header ----
         if (payroll == null)
         {
@@ -211,6 +225,8 @@ public class PayrollService : IPayrollService
                 foreach (var loan in employeeLoans.Where(l => l.PaidInstallments < l.TotalInstallments))
                     deduction += LoanService.InstallmentFor(loan, loan.PaidInstallments + 1);
             }
+
+                        deduction += Round(fixedDeductionBySalary.GetValueOrDefault(salary.Id) * fraction);
 
             // Overtime (only for overtime-eligible employees).
             var overtimeHours = employee.IsOvertimeEligible ? empAttendance.Sum(a => a.OTHours ?? 0m) : 0m;

@@ -94,6 +94,17 @@ namespace HRMS.Application
             services.AddScoped<ILeaveBalanceGenerationService, LeaveBalanceGenerationService>();
             services.AddScoped<IBonusService, BonusService>();
             services.AddScoped<ILoanService, LoanService>();
+
+            // Phase 8 - Operations & Security Extras
+            services.AddScoped<ILoginHistoryService, LoginHistoryService>();
+            services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IMenuPermissionService, MenuPermissionService>();
+            services.AddScoped<IAttendanceLockService, AttendanceLockService>();
+            services.AddScoped<IShortLeaveService, ShortLeaveService>();
+            services.AddScoped<ISalaryComponentService, SalaryComponentService>();
+            services.AddScoped<ISalaryBreakdownService, SalaryBreakdownService>();
+            services.AddScoped<IBiometricSyncHistoryService, BiometricSyncHistoryService>();
+            services.AddScoped<IEmployeeSearchService, EmployeeSearchService>();
             return services;
         }
     }

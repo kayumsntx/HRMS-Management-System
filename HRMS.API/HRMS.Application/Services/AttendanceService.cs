@@ -28,11 +28,13 @@ public class AttendanceService : IAttendanceService
 
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IAttendanceLockService _lock;
 
-    public AttendanceService(IUnitOfWork unitOfWork, IMapper mapper)
+    public AttendanceService(IUnitOfWork unitOfWork, IMapper mapper, IAttendanceLockService lockService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _lock = lockService;
     }
 
     // =====================================================================
@@ -42,6 +44,7 @@ public class AttendanceService : IAttendanceService
     {
         var fromDate = dto.FromDate.Date;
         var toDate = dto.ToDate.Date;
+        await _lock.EnsureOpenAsync(fromDate, toDate);
 
         // ---- Employees ----
         List<Employee> employees;
@@ -78,6 +81,12 @@ public class AttendanceService : IAttendanceService
                 h.IsActive && h.HolidayDate >= fromDate && h.HolidayDate <= toDate))
             .Select(h => h.HolidayDate.Date)
             .ToHashSet();
+
+                var approvedShort = ChangeRequestStatus.Approved.ToString();
+        var shortLeaveHours = (await _unitOfWork.Repository<ShortLeave>().FindAsync(s =>
+                s.Status == approvedShort && s.LeaveDate >= fromDate && s.LeaveDate <= toDate))
+            .GroupBy(s => (s.EmployeeId, s.LeaveDate.Date))
+            .ToDictionary(g => g.Key, g => g.Sum(s => s.TotalHours));
 
         // ---- Punches (range widened to cover night shifts) ----
         var punchStart = fromDate.AddDays(-1);
@@ -169,6 +178,7 @@ public class AttendanceService : IAttendanceService
                 {
                     var record = new EmployeeAttendance { EmployeeId = employee.Id, WorkingDate = date, ShiftId = shift.Id };
                     ApplyMetrics(record, metrics);
+                    record.TotalShortLeave = shortLeaveHours.TryGetValue((employee.Id, date), out var shortNew) ? shortNew : (decimal?)null;
                     await _unitOfWork.Repository<EmployeeAttendance>().AddAsync(record);
                     result.Created++;
                 }
@@ -176,6 +186,7 @@ public class AttendanceService : IAttendanceService
                 {
                     existing.ShiftId = shift.Id;
                     ApplyMetrics(existing, metrics);
+                    existing.TotalShortLeave = shortLeaveHours.TryGetValue((employee.Id, date), out var shortOld) ? shortOld : (decimal?)null;
                     existing.UpdatedDate = DateTime.UtcNow;
                     _unitOfWork.Repository<EmployeeAttendance>().Update(existing);
                     result.Updated++;
@@ -248,6 +259,7 @@ public class AttendanceService : IAttendanceService
             ?? throw new NotFoundException(nameof(Shift), attendance.ShiftId);
 
         var date = attendance.WorkingDate.Date;
+        await _lock.EnsureOpenAsync(date, date);
         var firstIn = dto.FirstInTime ?? attendance.FirstInTime;
         var lastOut = dto.LastOutTime ?? attendance.LastOutTime;
 

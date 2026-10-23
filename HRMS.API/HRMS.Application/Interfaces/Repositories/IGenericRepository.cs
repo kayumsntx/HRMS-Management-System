@@ -8,6 +8,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<T?> GetByIdAsync(int id);
     Task<List<T>> GetAllAsync();
     Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
+    Task<(List<T> Items, int Total)> FindPagedAsync(Expression<Func<T, bool>> predicate, int pageNumber, int pageSize);
     Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
     Task AddAsync(T entity);
     Task AddRangeAsync(IEnumerable<T> entities);

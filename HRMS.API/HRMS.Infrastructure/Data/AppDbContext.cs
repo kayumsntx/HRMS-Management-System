@@ -103,6 +103,15 @@ public class AppDbContext : DbContext
     public DbSet<LeavePolicy> LeavePolicies => Set<LeavePolicy>();
     public DbSet<Bonus> Bonuses => Set<Bonus>();
     public DbSet<Loan> Loans => Set<Loan>();
+    public DbSet<LoginHistory> LoginHistories => Set<LoginHistory>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<Menu> Menus => Set<Menu>();
+    public DbSet<MenuPermission> MenuPermissions => Set<MenuPermission>();
+    public DbSet<ShortLeave> ShortLeaves => Set<ShortLeave>();
+    public DbSet<AttendanceMonthLock> AttendanceMonthLocks => Set<AttendanceMonthLock>();
+    public DbSet<BiometricSyncHistory> BiometricSyncHistories => Set<BiometricSyncHistory>();
+    public DbSet<SalaryComponent> SalaryComponents => Set<SalaryComponent>();
+    public DbSet<EmployeeSalaryComponent> EmployeeSalaryComponents => Set<EmployeeSalaryComponent>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -123,7 +132,9 @@ public class AppDbContext : DbContext
     {
         typeof(AuditLog),        // never audit the audit log itself
         typeof(Notification),    // too noisy
-        typeof(BiometricPunch)   // very high volume
+        typeof(BiometricPunch),   // very high volume
+        typeof(LoginHistory),
+        typeof(RefreshToken)
     };
 
     private static readonly HashSet<string> SensitiveProperties = new() { "PasswordHash" };   // value is masked

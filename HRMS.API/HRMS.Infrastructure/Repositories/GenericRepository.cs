@@ -24,6 +24,19 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     public async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
         => await _dbSet.Where(predicate).ToListAsync();
 
+    // Filtering, counting and paging all happen in SQL. Newest (highest Id) first.
+    public async Task<(List<T> Items, int Total)> FindPagedAsync(Expression<Func<T, bool>> predicate, int pageNumber, int pageSize)
+    {
+        var query = _dbSet.Where(predicate);
+        var total = await query.CountAsync();
+        var items = await query.OrderByDescending(x => x.Id)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, total);
+    }
+
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         => await _dbSet.AnyAsync(predicate);
 

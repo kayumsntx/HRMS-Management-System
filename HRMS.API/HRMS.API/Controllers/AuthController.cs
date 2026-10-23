@@ -1,11 +1,12 @@
-using Microsoft.AspNetCore.RateLimiting;
 using HRMS.Application.Common.Exceptions;
 using HRMS.Application.Common.Interfaces;
 using HRMS.Application.Common.Models;
+using HRMS.Application.DTOs.Security;
 using HRMS.Application.DTOs.Users;
 using HRMS.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace HRMS.API.Controllers;
 
@@ -25,13 +26,34 @@ public class AuthController : ControllerBase
         _currentUser = currentUser;
     }
 
+    private string? Ip => HttpContext.Connection.RemoteIpAddress?.ToString();
+    private string? Agent => Request.Headers.UserAgent.ToString();
+
     [AllowAnonymous]
     [EnableRateLimiting("login")]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
     {
-        var result = await _authService.LoginAsync(dto);
+        var result = await _authService.LoginAsync(dto, Ip, Agent);
         return Ok(ApiResponse<UserLoginResponseDto>.SuccessResponse(result, "Login successful."));
+    }
+
+    // Exchanges a refresh token for a new access token + a NEW refresh token (the old one stops working).
+    [AllowAnonymous]
+    [EnableRateLimiting("login")]
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequestDto dto)
+    {
+        var result = await _authService.RefreshAsync(dto.RefreshToken, Ip);
+        return Ok(ApiResponse<UserLoginResponseDto>.SuccessResponse(result, "Token refreshed."));
+    }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout([FromBody] RefreshTokenRequestDto dto)
+    {
+        var userId = _currentUser.UserId ?? throw new UnauthorizedException("Invalid token.");
+        await _authService.LogoutAsync(userId, dto.RefreshToken);
+        return Ok(ApiResponse<string>.SuccessResponse("", "Logged out successfully."));
     }
 
     [HttpGet("me")]
@@ -47,6 +69,6 @@ public class AuthController : ControllerBase
     {
         var userId = _currentUser.UserId ?? throw new UnauthorizedException("Invalid token.");
         await _authService.ChangePasswordAsync(userId, dto);
-        return Ok(ApiResponse<string>.SuccessResponse("", "Password changed successfully."));
+        return Ok(ApiResponse<string>.SuccessResponse("", "Password changed. Please log in again on your other devices."));
     }
 }

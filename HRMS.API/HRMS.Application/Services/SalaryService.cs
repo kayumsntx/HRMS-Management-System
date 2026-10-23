@@ -80,6 +80,10 @@ public class SalaryService : ISalaryService
         if (dto.EmployeeId != salary.EmployeeId)
             throw new BadRequestException("The Employee of an existing salary record cannot be changed.");
 
+                if ((dto.BasicSalary != salary.BasicSalary || dto.GrossSalary != salary.GrossSalary) &&
+            await _unitOfWork.Repository<EmployeeSalaryComponent>().AnyAsync(c => c.EmployeeSalaryId == id))
+            throw new BadRequestException("This salary has a component breakdown. Clear it with PUT /api/salary/{id}/components (empty list) before changing Basic/Gross, then save the breakdown again.");
+
         await ApplyPeriodRulesAsync(dto, id);
 
         _mapper.Map(dto, salary);
