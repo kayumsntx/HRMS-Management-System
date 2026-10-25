@@ -1,111 +1,107 @@
-using HRMS.Application.Common.Interfaces;
+using System.Reflection;
 using FluentValidation;
+using HRMS.Application.Common.Interfaces;
 using HRMS.Application.Interfaces.Services;
 using HRMS.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HRMS.Application
+namespace HRMS.Application;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
-        {
-            //AutoMapper  MappingProfile  auto
-            services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
+        services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-            //FluentValidation  Validator  auto 
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        // ---- Organization ----
+        services.AddScoped<ICompanyService, CompanyService>();
+        services.AddScoped<IUnitService, UnitService>();
+        services.AddScoped<IDepartmentService, DepartmentService>();
+        services.AddScoped<ISectionService, SectionService>();
+        services.AddScoped<IDesignationService, DesignationService>();
+        services.AddScoped<IGradeService, GradeService>();
+        services.AddScoped<IEmployeeStatusService, EmployeeStatusService>();
+        services.AddScoped<ISubSectionService, SubSectionService>();
+        services.AddScoped<IJobLocationService, JobLocationService>();
+        services.AddScoped<IStaffCategoryService, StaffCategoryService>();
+        services.AddScoped<ISkillCategoryService, SkillCategoryService>();
+        services.AddScoped<IPaymentTypeService, PaymentTypeService>();
+        services.AddScoped<IBankService, BankService>();
 
-            // Existing Services
-            services.AddScoped<ICompanyService, CompanyService>();
-            services.AddScoped<IDepartmentService, DepartmentService>();
-            services.AddScoped<ISectionService, SectionService>();
-            services.AddScoped<IDesignationService, DesignationService>();
-            services.AddScoped<IGradeService, GradeService>();
-            services.AddScoped<IEmployeeStatusService, EmployeeStatusService>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<IEmployeeEducationService, EmployeeEducationService>();
-            services.AddScoped<IEmployeeNomineeService, EmployeeNomineeService>();
-            services.AddScoped<IEmployeeDocumentService, EmployeeDocumentService>();
-            services.AddScoped<IRoleService, RoleService>();
+        // ---- Employee ----
+        services.AddScoped<IEmployeeService, EmployeeService>();
+        services.AddScoped<IEmployeeSearchService, EmployeeSearchService>();
+        services.AddScoped<IEmployeeEducationService, EmployeeEducationService>();
+        services.AddScoped<IEmployeeNomineeService, EmployeeNomineeService>();
+        services.AddScoped<IEmployeeDocumentService, EmployeeDocumentService>();
+        services.AddScoped<IEmployeeSkillService, EmployeeSkillService>();
+        services.AddScoped<IEmployeePreviousJobService, EmployeePreviousJobService>();
+        services.AddScoped<IEmployeeAddressService, EmployeeAddressService>();
+        services.AddScoped<IEmployeeBankAccountService, EmployeeBankAccountService>();
+        services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IIdCardService, IdCardService>();
+        services.AddScoped<IIdCardDocumentService, IdCardDocumentService>();
 
-            // Added Services - Part I
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUserRoleService, UserRoleService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IShiftService, ShiftService>();
-            services.AddScoped<IShiftAssignmentService, ShiftAssignmentService>();
-            services.AddScoped<ILeaveTypeService, LeaveTypeService>();
-            services.AddScoped<ILeaveBalanceService, LeaveBalanceService>();
-            services.AddScoped<ILeaveService, LeaveService>();
-            services.AddScoped<IBiometricDeviceService, BiometricDeviceService>();
+        // ---- Security ----
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IUserRoleService, UserRoleService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ILoginHistoryService, LoginHistoryService>();
+        services.AddScoped<IMenuService, MenuService>();
+        services.AddScoped<IMenuPermissionService, MenuPermissionService>();
+        services.AddScoped<IAuditLogService, AuditLogService>();
 
-            // Added Services - Part F
-            services.AddScoped<IBiometricPunchService, BiometricPunchService>();
-            services.AddScoped<IAttendanceService, AttendanceService>();
-            services.AddScoped<ISalaryService, SalaryService>();
-            services.AddScoped<IPayrollService, PayrollService>();
+        // ---- Biometric / Shift / Attendance ----
+        services.AddScoped<IBiometricDeviceService, BiometricDeviceService>();
+        services.AddScoped<IBiometricPunchService, BiometricPunchService>();
+        services.AddScoped<IBiometricSyncHistoryService, BiometricSyncHistoryService>();
+        services.AddScoped<IShiftService, ShiftService>();
+        services.AddScoped<IShiftAssignmentService, ShiftAssignmentService>();
+        services.AddScoped<IHolidayService, HolidayService>();
+        services.AddScoped<IAttendanceService, AttendanceService>();
+        services.AddScoped<IAttendanceLockService, AttendanceLockService>();
+        services.AddScoped<IShortLeaveService, ShortLeaveService>();
 
-            // System & Notifications & Holidays & IdCards
-            services.AddScoped<IHolidayService, HolidayService>();
-            services.AddScoped<IAuditLogService, AuditLogService>();
-            services.AddScoped<INotificationPublisher, NotificationPublisher>();
-            services.AddScoped<INotificationService, NotificationService>();
-            services.AddScoped<IIdCardService, IdCardService>();
-            // MySpace, TeamLeave, Dashboard, Reports
-            services.AddScoped<IMyPayslipService, MyPayslipService>();
-            services.AddScoped<ITeamLeaveService, TeamLeaveService>();
-            services.AddScoped<IDashboardService, DashboardService>();
-            services.AddScoped<IReportService, ReportService>();
-            // HR Modules - Requisition, Career, Separation, Recruitment, Performance, Training
-            services.AddScoped<IRequisitionTypeService, RequisitionTypeService>();
-            services.AddScoped<ITrainingProgramService, TrainingProgramService>();
-            services.AddScoped<ITrainerService, TrainerService>();
-            services.AddScoped<IPerformancePeriodService, PerformancePeriodService>();
-            services.AddScoped<IKpiService, KpiService>();
-            services.AddScoped<IRequisitionService, RequisitionService>();
-            services.AddScoped<ICareerService, CareerService>();
-            services.AddScoped<ISeparationService, SeparationService>();
-            services.AddScoped<IRecruitmentService, RecruitmentService>();
-            services.AddScoped<IHiringService, HiringService>();
-            services.AddScoped<IPerformanceService, PerformanceService>();
-            services.AddScoped<ITrainingService, TrainingService>();
-            services.AddScoped<IFileService, FileService>();
-            services.AddScoped<IIdCardDocumentService, IdCardDocumentService>();
-            services.AddScoped<ITeamService, TeamService>();
-            // Organization masters, Employee extras, Leave policies, Bonuses, Loans
-            services.AddScoped<ISubSectionService, SubSectionService>();
-            services.AddScoped<IJobLocationService, JobLocationService>();
-            services.AddScoped<IStaffCategoryService, StaffCategoryService>();
-            services.AddScoped<ISkillCategoryService, SkillCategoryService>();
-            services.AddScoped<IPaymentTypeService, PaymentTypeService>();
-            services.AddScoped<IBankService, BankService>();
-            services.AddScoped<IEmployeeSkillService, EmployeeSkillService>();
-            services.AddScoped<IEmployeePreviousJobService, EmployeePreviousJobService>();
-            services.AddScoped<IEmployeeAddressService, EmployeeAddressService>();
-            services.AddScoped<IEmployeeBankAccountService, EmployeeBankAccountService>();
-            services.AddScoped<ILeavePolicyService, LeavePolicyService>();
-            services.AddScoped<ILeaveBalanceGenerationService, LeaveBalanceGenerationService>();
-            services.AddScoped<IBonusService, BonusService>();
-            services.AddScoped<ILoanService, LoanService>();
+        // ---- Leave ----
+        services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+        services.AddScoped<ILeaveBalanceService, LeaveBalanceService>();
+        services.AddScoped<ILeaveService, LeaveService>();
+        services.AddScoped<ILeavePolicyService, LeavePolicyService>();
+        services.AddScoped<ILeaveBalanceGenerationService, LeaveBalanceGenerationService>();
+        services.AddScoped<ITeamLeaveService, TeamLeaveService>();
 
-            // Phase 8 - Operations & Security Extras
-            services.AddScoped<ILoginHistoryService, LoginHistoryService>();
-            services.AddScoped<IMenuService, MenuService>();
-            services.AddScoped<IMenuPermissionService, MenuPermissionService>();
-            services.AddScoped<IAttendanceLockService, AttendanceLockService>();
-            services.AddScoped<IShortLeaveService, ShortLeaveService>();
-            services.AddScoped<ISalaryComponentService, SalaryComponentService>();
-            services.AddScoped<ISalaryBreakdownService, SalaryBreakdownService>();
-            services.AddScoped<IBiometricSyncHistoryService, BiometricSyncHistoryService>();
-            services.AddScoped<IEmployeeSearchService, EmployeeSearchService>();
-            return services;
-        }
+        // ---- Payroll ----
+        services.AddScoped<ISalaryService, SalaryService>();
+        services.AddScoped<ISalaryComponentService, SalaryComponentService>();
+        services.AddScoped<ISalaryBreakdownService, SalaryBreakdownService>();
+        services.AddScoped<IBonusService, BonusService>();
+        services.AddScoped<ILoanService, LoanService>();
+        services.AddScoped<IPayrollService, PayrollService>();
+        services.AddScoped<IMyPayslipService, MyPayslipService>();
+
+        // ---- HR processes ----
+        services.AddScoped<IRequisitionTypeService, RequisitionTypeService>();
+        services.AddScoped<IRequisitionService, RequisitionService>();
+        services.AddScoped<ICareerService, CareerService>();
+        services.AddScoped<ISeparationService, SeparationService>();
+        services.AddScoped<IRecruitmentService, RecruitmentService>();
+        services.AddScoped<IHiringService, HiringService>();
+        services.AddScoped<IPerformancePeriodService, PerformancePeriodService>();
+        services.AddScoped<IKpiService, KpiService>();
+        services.AddScoped<IPerformanceService, PerformanceService>();
+        services.AddScoped<ITrainingProgramService, TrainingProgramService>();
+        services.AddScoped<ITrainerService, TrainerService>();
+        services.AddScoped<ITrainingService, TrainingService>();
+        services.AddScoped<ITeamService, TeamService>();
+
+        // ---- Notification / Dashboard / Reports ----
+        services.AddScoped<INotificationPublisher, NotificationPublisher>();
+        services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<IDashboardService, DashboardService>();
+        services.AddScoped<IReportService, ReportService>();
+
+        return services;
     }
 }

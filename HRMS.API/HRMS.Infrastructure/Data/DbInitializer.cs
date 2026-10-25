@@ -6,7 +6,7 @@ namespace HRMS.Infrastructure.Data;
 
 public static class DbInitializer
 {
-    public static async Task SeedAsync(AppDbContext context, IPasswordHasher passwordHasher)
+    public static async Task SeedAsync(AppDbContext context, IPasswordHasher passwordHasher, string? adminPassword)
     {
         await context.Database.MigrateAsync();
 
@@ -26,15 +26,19 @@ public static class DbInitializer
         }
         await context.SaveChangesAsync();
 
-        // ---- Default Admin User (username: admin / password: Admin@123) ----
+        // ---- First admin user (created only when it does not exist yet) ----
         var adminUser = await context.Users.FirstOrDefaultAsync(u => u.UserName == "admin");
         if (adminUser is null)
         {
+            if (string.IsNullOrWhiteSpace(adminPassword) || adminPassword.Length < 8)
+                throw new InvalidOperationException(
+                    "No admin user exists yet. Configure 'Seed:AdminPassword' (at least 8 characters) to create the first admin account.");
+
             adminUser = new User
             {
                 UserName = "admin",
                 Email = "admin@hrms.local",
-                PasswordHash = passwordHasher.Hash("Admin@123")
+                PasswordHash = passwordHasher.Hash(adminPassword)
             };
             context.Users.Add(adminUser);
             await context.SaveChangesAsync();
@@ -47,15 +51,14 @@ public static class DbInitializer
             await context.SaveChangesAsync();
         }
 
-        // ---- Employee Statuses ----
-        var statuses = new[] { "Probation", "Confirmed", "Contractual", "Resigned", "Terminated" };
-        foreach (var name in statuses)
+        // ---- Employee statuses ----
+        foreach (var name in new[] { "Probation", "Confirmed", "Contractual", "Resigned", "Terminated" })
         {
             if (!await context.EmployeeStatuses.AnyAsync(s => s.StatusName == name))
                 context.EmployeeStatuses.Add(new EmployeeStatus { StatusName = name });
         }
 
-        // ---- Leave Types ----
+        // ---- Leave types ----
         var leaveTypes = new (string Name, bool IsPaid)[]
         {
             ("Casual Leave", true),

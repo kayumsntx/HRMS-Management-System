@@ -15,54 +15,69 @@ public class AppDbContext : DbContext
         _currentUser = currentUser;
     }
 
-    // Organization Setup
+    // ---- Organization ----
     public DbSet<Company> Companies => Set<Company>();
     public DbSet<Unit> Units => Set<Unit>();
     public DbSet<Department> Departments => Set<Department>();
     public DbSet<Section> Sections => Set<Section>();
+    public DbSet<SubSection> SubSections => Set<SubSection>();
     public DbSet<Designation> Designations => Set<Designation>();
     public DbSet<Grade> Grades => Set<Grade>();
     public DbSet<EmployeeStatus> EmployeeStatuses => Set<EmployeeStatus>();
+    public DbSet<JobLocation> JobLocations => Set<JobLocation>();
+    public DbSet<StaffCategory> StaffCategories => Set<StaffCategory>();
+    public DbSet<SkillCategory> SkillCategories => Set<SkillCategory>();
+    public DbSet<PaymentType> PaymentTypes => Set<PaymentType>();
+    public DbSet<Bank> Banks => Set<Bank>();
 
-    // Employee
+    // ---- Employee ----
     public DbSet<Employee> Employees => Set<Employee>();
     public DbSet<EmployeeEducation> EmployeeEducations => Set<EmployeeEducation>();
     public DbSet<EmployeeNominee> EmployeeNominees => Set<EmployeeNominee>();
     public DbSet<EmployeeDocument> EmployeeDocuments => Set<EmployeeDocument>();
+    public DbSet<EmployeeSkill> EmployeeSkills => Set<EmployeeSkill>();
+    public DbSet<EmployeePreviousJob> EmployeePreviousJobs => Set<EmployeePreviousJob>();
+    public DbSet<EmployeeAddress> EmployeeAddresses => Set<EmployeeAddress>();
+    public DbSet<EmployeeBankAccount> EmployeeBankAccounts => Set<EmployeeBankAccount>();
+    public DbSet<IdCard> IdCards => Set<IdCard>();
 
-    // Security
+    // ---- Security ----
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();
+    public DbSet<LoginHistory> LoginHistories => Set<LoginHistory>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<Menu> Menus => Set<Menu>();
+    public DbSet<MenuPermission> MenuPermissions => Set<MenuPermission>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
-    // Biometric
+    // ---- Biometric / Shift / Attendance ----
     public DbSet<BiometricDevice> BiometricDevices => Set<BiometricDevice>();
     public DbSet<BiometricPunch> BiometricPunches => Set<BiometricPunch>();
-
-    // Shift
+    public DbSet<BiometricSyncHistory> BiometricSyncHistories => Set<BiometricSyncHistory>();
     public DbSet<Shift> Shifts => Set<Shift>();
     public DbSet<ShiftAssignment> ShiftAssignments => Set<ShiftAssignment>();
-
-    // Attendance
-    public DbSet<EmployeeAttendance> EmployeeAttendances => Set<EmployeeAttendance>();
     public DbSet<Holiday> Holidays => Set<Holiday>();
+    public DbSet<EmployeeAttendance> EmployeeAttendances => Set<EmployeeAttendance>();
+    public DbSet<AttendanceMonthLock> AttendanceMonthLocks => Set<AttendanceMonthLock>();
+    public DbSet<ShortLeave> ShortLeaves => Set<ShortLeave>();
 
-    // Leave
+    // ---- Leave ----
     public DbSet<LeaveType> LeaveTypes => Set<LeaveType>();
+    public DbSet<LeavePolicy> LeavePolicies => Set<LeavePolicy>();
     public DbSet<EmployeeLeaveBalance> EmployeeLeaveBalances => Set<EmployeeLeaveBalance>();
     public DbSet<EmployeeLeave> EmployeeLeaves => Set<EmployeeLeave>();
 
-    // Payroll
+    // ---- Payroll ----
     public DbSet<EmployeeSalary> EmployeeSalaries => Set<EmployeeSalary>();
+    public DbSet<SalaryComponent> SalaryComponents => Set<SalaryComponent>();
+    public DbSet<EmployeeSalaryComponent> EmployeeSalaryComponents => Set<EmployeeSalaryComponent>();
+    public DbSet<Bonus> Bonuses => Set<Bonus>();
+    public DbSet<Loan> Loans => Set<Loan>();
     public DbSet<Payroll> Payrolls => Set<Payroll>();
     public DbSet<PayrollDetail> PayrollDetails => Set<PayrollDetail>();
 
-    // System
-    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
-    public DbSet<Notification> Notifications => Set<Notification>();
-    public DbSet<IdCard> IdCards => Set<IdCard>();
-
-    // Requisition, Career, Separation, Recruitment, Performance, Training
+    // ---- HR processes ----
     public DbSet<RequisitionType> RequisitionTypes => Set<RequisitionType>();
     public DbSet<Requisition> Requisitions => Set<Requisition>();
     public DbSet<RequisitionDetail> RequisitionDetails => Set<RequisitionDetail>();
@@ -89,29 +104,8 @@ public class AppDbContext : DbContext
     public DbSet<TrainingAttendance> TrainingAttendances => Set<TrainingAttendance>();
     public DbSet<TrainingEvaluation> TrainingEvaluations => Set<TrainingEvaluation>();
 
-    // Org Extras, Employee Extras, Payroll Extras
-    public DbSet<SubSection> SubSections => Set<SubSection>();
-    public DbSet<JobLocation> JobLocations => Set<JobLocation>();
-    public DbSet<StaffCategory> StaffCategories => Set<StaffCategory>();
-    public DbSet<SkillCategory> SkillCategories => Set<SkillCategory>();
-    public DbSet<PaymentType> PaymentTypes => Set<PaymentType>();
-    public DbSet<Bank> Banks => Set<Bank>();
-    public DbSet<EmployeeSkill> EmployeeSkills => Set<EmployeeSkill>();
-    public DbSet<EmployeePreviousJob> EmployeePreviousJobs => Set<EmployeePreviousJob>();
-    public DbSet<EmployeeAddress> EmployeeAddresses => Set<EmployeeAddress>();
-    public DbSet<EmployeeBankAccount> EmployeeBankAccounts => Set<EmployeeBankAccount>();
-    public DbSet<LeavePolicy> LeavePolicies => Set<LeavePolicy>();
-    public DbSet<Bonus> Bonuses => Set<Bonus>();
-    public DbSet<Loan> Loans => Set<Loan>();
-    public DbSet<LoginHistory> LoginHistories => Set<LoginHistory>();
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-    public DbSet<Menu> Menus => Set<Menu>();
-    public DbSet<MenuPermission> MenuPermissions => Set<MenuPermission>();
-    public DbSet<ShortLeave> ShortLeaves => Set<ShortLeave>();
-    public DbSet<AttendanceMonthLock> AttendanceMonthLocks => Set<AttendanceMonthLock>();
-    public DbSet<BiometricSyncHistory> BiometricSyncHistories => Set<BiometricSyncHistory>();
-    public DbSet<SalaryComponent> SalaryComponents => Set<SalaryComponent>();
-    public DbSet<EmployeeSalaryComponent> EmployeeSalaryComponents => Set<EmployeeSalaryComponent>();
+    // ---- System ----
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -124,17 +118,16 @@ public class AppDbContext : DbContext
     }
 
     // =====================================================================
-    // AUTOMATIC AUDIT LOG
-    // Every Create / Update / Delete made through SaveChangesAsync is recorded.
+    // AUTOMATIC AUDIT LOG: every Create / Update / Delete made through SaveChangesAsync is recorded.
     // =====================================================================
 
     private static readonly HashSet<Type> AuditExcludedTypes = new()
     {
         typeof(AuditLog),        // never audit the audit log itself
         typeof(Notification),    // too noisy
-        typeof(BiometricPunch),   // very high volume
-        typeof(LoginHistory),
-        typeof(RefreshToken)
+        typeof(BiometricPunch),  // very high volume
+        typeof(LoginHistory),    // has its own history screen
+        typeof(RefreshToken)     // secrets must never be copied into another table
     };
 
     private static readonly HashSet<string> SensitiveProperties = new() { "PasswordHash" };   // value is masked

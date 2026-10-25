@@ -1,8 +1,6 @@
-using Serilog;
-using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.RateLimiting;
 using HRMS.API.Extensions;
 using HRMS.API.Filters;
 using HRMS.API.Middlewares;
@@ -13,16 +11,20 @@ using HRMS.Infrastructure;
 using HRMS.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, services, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+builder.Host.UseSerilog((context, services, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddCors(options =>
 {
@@ -34,16 +36,16 @@ builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-    // Login: at most 10 attempts per minute PER IP address.
+    // Login and refresh: at most 10 requests per minute PER IP address.
     options.AddPolicy("login", httpContext =>
         RateLimitPartition.GetFixedWindowLimiter(
             httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
             _ => new FixedWindowRateLimiterOptions { PermitLimit = 10, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
 });
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-var jwtKey = builder.Configuration["Jwt:Key"]
-    ?? throw new InvalidOperationException("Jwt:Key is not configured.");
+var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key is not configured.");
+if (jwtKey.Length < 32 || (!builder.Environment.IsDevelopment() && jwtKey.StartsWith("CHANGE_ME")))
+    throw new InvalidOperationException("Jwt:Key must be a secret of at least 32 characters (set it with an environment variable or user-secrets).");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -65,7 +67,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization(options =>
 {
-    // Default for any endpoint that has no explicit authorization attribute.
+    // Default for every endpoint without its own [Authorize]/[AllowAnonymous]: Admin and HR only.
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .RequireRole("Admin", "HR")
@@ -74,8 +76,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddControllers(options =>
 {
-    // Runs FluentValidation validators automatically.
-    options.Filters.Add<ValidationFilter>();
+    options.Filters.Add<ValidationFilter>();   // runs the FluentValidation validators
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -87,7 +88,11 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
-    await DbInitializer.SeedAsync(context, passwordHasher);
+
+    // In production the first admin password MUST come from configuration (Seed:AdminPassword).
+    var adminPassword = builder.Configuration["Seed:AdminPassword"] ?? (app.Environment.IsDevelopment() ? "Admin@123" : null);
+
+    await DbInitializer.SeedAsync(context, passwordHasher, adminPassword);
     await DbInitializerExtras.SeedAsync(context);
     await DbInitializerMenus.SeedAsync(context);
 }
@@ -106,6 +111,8 @@ app.UseCors("Frontend");
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+app.MapGet("/health", () => Results.Ok(new { status = "ok" })).AllowAnonymous();
 
 app.Run();
